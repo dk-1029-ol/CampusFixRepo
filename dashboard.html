@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}Dashboard - CampusFix{% endblock %}
+
+{% block content %}
+<section class="py-5">
+  <div class="container">
+
+    <!-- Welcome + search -->
+    <div class="mb-4">
+      <h2 class="mb-1">Good to see you, {{ first_name }} 👋</h2>
+      <p class="text-muted mb-4">Here's what's happening with your requests.</p>
+
+      <div class="input-group input-group-lg" style="max-width: 480px;">
+        <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+        <input type="text" id="dashboardSearch" class="form-control" placeholder="Search for a service...">
+      </div>
+    </div>
+
+    <!-- Service categories -->
+    <div class="row g-3 mb-5" id="dashboardServiceRow">
+      {% for service in services %}
+      <div class="col-6 col-md-4 col-lg-2 dashboard-service-item" data-name="{{ service.slug }}">
+        <a href="{{ url_for('request_service', service=service.name) }}" class="text-decoration-none">
+          <div class="service-card text-center p-3 h-100">
+            <div class="service-icon mx-auto mb-2"><i class="bi {{ service.icon }}"></i></div>
+            <div class="small fw-semibold text-body">{{ service.name }}</div>
+          </div>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Summary cards -->
+    <div class="row g-3 mb-5">
+      <div class="col-6 col-md-3">
+        <div class="summary-card">
+          <div class="summary-number">{{ summary.total }}</div>
+          <div class="summary-label">Total Requests</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="summary-card">
+          <div class="summary-number">{{ summary.pending }}</div>
+          <div class="summary-label">Pending</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="summary-card">
+          <div class="summary-number">{{ summary.in_progress }}</div>
+          <div class="summary-label">In Progress</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="summary-card">
+          <div class="summary-number">{{ summary.completed }}</div>
+          <div class="summary-label">Completed</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent requests -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <h4 class="mb-0">Recent Requests</h4>
+      <a href="{{ url_for('my_requests') }}" class="small fw-semibold text-decoration-none">View all &rarr;</a>
+    </div>
+
+    {% if recent_requests %}
+    <div class="row g-3">
+      {% for r in recent_requests %}
+      <div class="col-md-6">
+        <div class="service-card p-3 h-100">
+          <div class="d-flex justify-content-between align-items-start mb-2">
+            <span class="fw-semibold">#{{ r.id }} &middot; {{ r.service }}</span>
+            <span class="badge rounded-pill badge-status-{{ r.status_class }}">{{ r.status }}</span>
+          </div>
+          <div class="text-muted small mb-1"><i class="bi bi-geo-alt me-1"></i>{{ r.location }} ({{ r.room_number }})</div>
+          <div class="text-muted small mb-3"><i class="bi bi-calendar3 me-1"></i>{{ r.created_at }}</div>
+          <a href="{{ url_for('request_details', request_id=r.id) }}" class="btn btn-sm btn-outline-cf">View Details</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-light border">
+      You haven't raised any requests yet. <a href="{{ url_for('services') }}">Browse services</a> to get started.
+    </div>
+    {% endif %}
+
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/student.js') }}"></script>
+{% endblock %}

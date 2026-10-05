@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}CampusFix{% endblock %}</title>
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <!-- Google Fonts: Poppins (headings) + Inter (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+  <!-- CampusFix custom styles -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+<!-- ============================= NAVBAR ============================= -->
+<nav class="navbar navbar-expand-lg navbar-cf sticky-top">
+  <div class="container">
+    <a class="navbar-brand" href="{{ url_for('index') }}">CampusFix<span class="brand-dot">.</span></a>
+
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#cfNavbar"
+            aria-controls="cfNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="cfNavbar">
+
+      {% if user and user.role == 'staff' %}
+        <!-- STAFF NAVBAR -->
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('staff_dashboard') }}">Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('staff_dashboard') }}">Requests</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Profile</a></li>
+          <li class="nav-item ms-lg-2">
+            <a class="btn btn-sm btn-outline-light" href="{{ url_for('logout') }}">Logout</a>
+          </li>
+        </ul>
+
+      {% elif user %}
+        <!-- STUDENT NAVBAR -->
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard') }}">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('services') }}">Services</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('my_requests') }}">My Requests</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">Profile</a></li>
+          <li class="nav-item ms-lg-2">
+            <a class="btn btn-sm btn-outline-light" href="{{ url_for('logout') }}">Logout</a>
+          </li>
+        </ul>
+
+      {% else %}
+        <!-- LOGGED-OUT NAVBAR -->
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0 align-items-lg-center">
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('index') }}">Home</a></li>
+          <li class="nav-item"><a class="nav-link" href="{{ url_for('services') }}">Services</a></li>
+          <li class="nav-item ms-lg-2">
+            <a class="btn btn-sm btn-outline-light" href="{{ url_for('login') }}">Login</a>
+          </li>
+          <li class="nav-item ms-lg-2">
+            <a class="btn btn-sm btn-cf-accent" href="{{ url_for('register') }}">Register</a>
+          </li>
+        </ul>
+      {% endif %}
+
+    </div>
+  </div>
+</nav>
+
+<!-- ============================= FLASH MESSAGES ============================= -->
+<!-- Shows one-time messages set with Flask's flash(), e.g. the priority-order warning -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+  <div class="container mt-3">
+    {% for category, message in messages %}
+    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+      {{ message }}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+{% endwith %}
+
+<!-- ============================= PAGE CONTENT ============================= -->
+{% block content %}{% endblock %}
+
+<!-- ============================= FOOTER ============================= -->
+<footer class="footer-cf py-4 mt-auto">
+  <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+    <div>
+      <span class="fw-semibold text-white">CampusFix</span>
+      <span class="ms-2 small">Campus services, made simple.</span>
+    </div>
+    <div class="small">
+      &copy; 2026 CampusFix &middot; A student mini-project
+    </div>
+  </div>
+</footer>
+
+<!-- Bootstrap 5 JS bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% block extra_scripts %}{% endblock %}
+
+</body>
+</html>

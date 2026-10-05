@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}Request a Service - CampusFix{% endblock %}
+
+{% block content %}
+<section class="py-5 bg-cf-bg">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-7">
+
+        <div class="auth-card p-4 p-md-5">
+          <h2 class="mb-1">Raise a Service Request</h2>
+          <p class="text-muted mb-4">Give us a few details so our staff can help you quickly.</p>
+
+          <div id="requestErrorBox" class="alert alert-danger d-none" role="alert"></div>
+
+          <form id="requestServiceForm" method="POST" action="{{ url_for('request_service') }}" novalidate>
+
+            <div class="mb-3">
+              <label for="service" class="form-label">Service</label>
+              <select class="form-select" id="service" name="service" required>
+                {% if preselected_service %}
+                <option value="" disabled>Select a service</option>
+                {% else %}
+                <option value="" disabled selected>Select a service</option>
+                {% endif %}
+
+                {% for s in services %}
+                  {% if s.name == preselected_service %}
+                  <option value="{{ s.name }}" selected>{{ s.name }}</option>
+                  {% else %}
+                  <option value="{{ s.name }}">{{ s.name }}</option>
+                  {% endif %}
+                {% endfor %}
+              </select>
+              <div class="invalid-feedback">Please select a service.</div>
+            </div>
+
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="location" class="form-label">Location</label>
+                <input type="text" class="form-control" id="location" name="location" placeholder="e.g. Hostel Block B" required>
+                <div class="invalid-feedback">Please enter the location.</div>
+              </div>
+              <div class="col-md-6">
+                <label for="room_number" class="form-label">Room Number</label>
+                <input type="text" class="form-control" id="room_number" name="room_number" placeholder="e.g. B-204" required>
+                <div class="invalid-feedback">Please enter the room number.</div>
+              </div>
+            </div>
+
+            <div class="mb-3 mt-3">
+              <label for="description" class="form-label">Problem Description</label>
+              <textarea class="form-control" id="description" name="description" rows="4"
+                        placeholder="Describe the issue in a few sentences..." required></textarea>
+              <div class="invalid-feedback">Please describe the problem.</div>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label d-block">Priority</label>
+              <div class="btn-group" role="group" aria-label="Priority">
+                <input type="radio" class="btn-check" name="priority" id="priorityLow" value="Low" autocomplete="off">
+                <label class="btn btn-outline-cf" for="priorityLow">Low</label>
+
+                <input type="radio" class="btn-check" name="priority" id="priorityMedium" value="Medium" autocomplete="off" checked>
+                <label class="btn btn-outline-cf" for="priorityMedium">Medium</label>
+
+                <input type="radio" class="btn-check" name="priority" id="priorityHigh" value="High" autocomplete="off">
+                <label class="btn btn-outline-cf" for="priorityHigh">High</label>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-cf-accent w-100">Submit Request</button>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/student.js') }}"></script>
+{% endblock %}

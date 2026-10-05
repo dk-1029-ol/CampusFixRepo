@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+{% block title %}Register - CampusFix{% endblock %}
+
+{% block content %}
+<section class="py-5 bg-cf-bg">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8 col-lg-7">
+
+        <div class="auth-card p-4 p-md-5">
+          <h2 class="mb-1">Create your account</h2>
+          <p class="text-muted mb-4">Register with your college email to start raising requests.</p>
+
+          {% if error %}
+          <div id="registerErrorBox" class="alert alert-danger" role="alert">{{ error }}</div>
+          {% else %}
+          <div id="registerErrorBox" class="alert alert-danger d-none" role="alert"></div>
+          {% endif %}
+
+          <form id="registerForm" method="POST" action="{{ url_for('register') }}" novalidate>
+            <div class="row g-3">
+
+              <div class="col-md-6">
+                <label for="full_name" class="form-label">Full Name</label>
+                <input type="text" class="form-control" id="full_name" name="full_name" placeholder="e.g. Aditi Sharma" required>
+                <div class="invalid-feedback">Please enter your full name.</div>
+              </div>
+
+              <div class="col-md-6">
+                <label for="student_id" class="form-label">Student ID</label>
+                <input type="text" class="form-control" id="student_id" name="student_id" placeholder="e.g. STU2024001" required>
+                <div class="invalid-feedback">Please enter your student ID.</div>
+              </div>
+
+              <div class="col-md-6">
+                <label for="email" class="form-label">College Email</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="you@campusfix.edu" required>
+                <div class="invalid-feedback">Please enter a valid email address.</div>
+              </div>
+
+              <div class="col-md-6">
+                <label for="phone" class="form-label">Phone Number</label>
+                <input type="tel" class="form-control" id="phone" name="phone" placeholder="10-digit number" required>
+                <div class="invalid-feedback">Please enter a valid 10-digit phone number.</div>
+              </div>
+
+              <div class="col-md-6">
+                <label for="department" class="form-label">Department</label>
+                <select class="form-select" id="department" name="department" required>
+                  <option value="" selected disabled>Select department</option>
+                  <option>Computer Engineering</option>
+                  <option>IT Engineering</option>
+                  <option>Mechanical Engineering</option>
+                  <option>Electrical Engineering</option>
+                  <option>Civil Engineering</option>
+                  <option>Other</option>
+                </select>
+                <div class="invalid-feedback">Please select your department.</div>
+              </div>
+
+              <div class="col-md-6">
+                <label for="year" class="form-label">Year</label>
+                <select class="form-select" id="year" name="year" required>
+                  <option value="" selected disabled>Select year</option>
+                  <option>1st Year</option>
+                  <option>2nd Year</option>
+                  <option>3rd Year</option>
+                  <option>4th Year</option>
+                </select>
+                <div class="invalid-feedback">Please select your year.</div>
+              </div>
+
+              <div class="col-md-6">
+                <label for="password" class="form-label">Password</label>
+                <div class="input-group">
+                  <input type="password" class="form-control" id="password" name="password" placeholder="At least 6 characters" required minlength="6">
+                  <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                    <i class="bi bi-eye" id="togglePasswordIcon"></i>
+                  </button>
+                </div>
+                <div class="invalid-feedback">Password must be at least 6 characters.</div>
+              </div>
+
+              <div class="col-md-6">
+                <label for="confirm_password" class="form-label">Confirm Password</label>
+                <div class="input-group">
+                  <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Re-enter password" required>
+                  <button class="btn btn-outline-secondary" type="button" id="toggleConfirmPassword">
+                    <i class="bi bi-eye" id="toggleConfirmPasswordIcon"></i>
+                  </button>
+                </div>
+                <div class="invalid-feedback">Passwords do not match.</div>
+              </div>
+
+            </div>
+
+            <button type="submit" class="btn btn-cf-primary w-100 mt-4 mb-3">Create Account</button>
+            <a href="{{ url_for('login') }}" class="d-block text-center small">Already have an account? Login</a>
+
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+{% endblock %}

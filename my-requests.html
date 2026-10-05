@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}My Requests - CampusFix{% endblock %}
+
+{% block content %}
+<section class="py-5">
+  <div class="container">
+
+    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+      <div>
+        <h2 class="mb-1">My Requests</h2>
+        <p class="text-muted mb-0">Track every request you've raised.</p>
+      </div>
+      <a href="{{ url_for('request_service') }}" class="btn btn-cf-accent">
+        <i class="bi bi-plus-lg me-1"></i> New Request
+      </a>
+    </div>
+
+    <!-- Status filter -->
+    <div class="mb-3">
+      <select id="statusFilter" class="form-select" style="max-width: 240px;">
+        <option value="all">All Statuses</option>
+        <option value="pending">Pending</option>
+        <option value="accepted">Accepted</option>
+        <option value="in progress">In Progress</option>
+        <option value="completed">Completed</option>
+        <option value="rejected">Rejected</option>
+      </select>
+    </div>
+
+    {% if requests %}
+    <div class="table-responsive service-card p-0">
+      <table class="table align-middle mb-0" id="myRequestsTable">
+        <thead class="table-light">
+          <tr>
+            <th>Request ID</th>
+            <th>Service</th>
+            <th>Location</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in requests %}
+          <tr class="my-request-row" data-status="{{ r.status_lower }}">
+            <td>#{{ r.id }}</td>
+            <td>{{ r.service }}</td>
+            <td>{{ r.location }} <span class="text-muted">({{ r.room_number }})</span></td>
+            <td>{{ r.created_at }}</td>
+            <td><span class="badge rounded-pill badge-status-{{ r.status_class }}">{{ r.status }}</span></td>
+            <td class="text-end">
+              <a href="{{ url_for('request_details', request_id=r.id) }}" class="btn btn-sm btn-outline-cf">View Details</a>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="alert alert-light border">
+      You haven't raised any requests yet. <a href="{{ url_for('services') }}">Browse services</a> to get started.
+    </div>
+    {% endif %}
+
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/student.js') }}"></script>
+{% endblock %}

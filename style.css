@@ -1,0 +1,218 @@
+/* ==========================================================================
+   CampusFix - style.css
+   Custom styles that sit on TOP of Bootstrap 5.
+   We keep this file small on purpose: Bootstrap handles layout/grid/
+   components, and this file only handles CampusFix's own look & feel
+   (colors, fonts, a few custom pieces like the hero and status badges).
+   ========================================================================== */
+
+/* ---- Design tokens -------------------------------------------------- */
+:root {
+  --cf-primary: #1F3A3D;      /* deep teal - navbar, headings, primary buttons */
+  --cf-primary-light: #2C4F53;
+  --cf-accent: #E9722C;       /* warm orange - CTAs, highlights */
+  --cf-accent-dark: #CF5F1D;
+  --cf-bg: #F6F7F4;           /* soft off-white page background */
+  --cf-ink: #22282A;          /* main text color */
+  --cf-muted: #6B7573;
+  --cf-success: #2E7D5B;
+  --cf-danger: #C0392B;
+  --cf-warning: #C98A1D;
+  --cf-border: #E2E5E1;
+}
+
+body {
+  background-color: var(--cf-bg);
+  color: var(--cf-ink);
+  font-family: "Inter", "Segoe UI", sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6,
+.font-heading {
+  font-family: "Poppins", "Segoe UI", sans-serif;
+  color: var(--cf-primary);
+}
+
+a {
+  color: var(--cf-primary);
+}
+
+/* ---- Buttons ---------------------------------------------------------- */
+.btn-cf-primary {
+  background-color: var(--cf-primary);
+  border-color: var(--cf-primary);
+  color: #fff;
+}
+.btn-cf-primary:hover, .btn-cf-primary:focus {
+  background-color: var(--cf-primary-light);
+  border-color: var(--cf-primary-light);
+  color: #fff;
+}
+
+.btn-cf-accent {
+  background-color: var(--cf-accent);
+  border-color: var(--cf-accent);
+  color: #fff;
+}
+.btn-cf-accent:hover, .btn-cf-accent:focus {
+  background-color: var(--cf-accent-dark);
+  border-color: var(--cf-accent-dark);
+  color: #fff;
+}
+
+.btn-outline-cf {
+  border-color: var(--cf-primary);
+  color: var(--cf-primary);
+  background-color: transparent;
+}
+.btn-outline-cf:hover {
+  background-color: var(--cf-primary);
+  color: #fff;
+}
+
+/* ---- Navbar ------------------------------------------------------------ */
+.navbar-cf {
+  background-color: var(--cf-primary);
+}
+.navbar-cf .navbar-brand {
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: 0.2px;
+}
+.navbar-cf .navbar-brand .brand-dot {
+  color: var(--cf-accent);
+}
+.navbar-cf .nav-link {
+  color: rgba(255, 255, 255, 0.85);
+}
+.navbar-cf .nav-link.active,
+.navbar-cf .nav-link:hover {
+  color: #fff;
+}
+
+/* ---- Hero (landing page) ---------------------------------------------- */
+.cf-hero {
+  padding: 4.5rem 0 3.5rem;
+}
+.cf-hero .cf-tagline {
+  color: var(--cf-accent);
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+}
+.cf-hero p.lead {
+  color: var(--cf-muted);
+  max-width: 42ch;
+}
+
+/* Simple 2x2 icon grid used on the hero instead of a generic stat block */
+.cf-hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+.cf-hero-grid .cf-hero-tile {
+  background: #fff;
+  border: 1px solid var(--cf-border);
+  border-radius: 10px;
+  padding: 1.1rem 1rem;
+}
+.cf-hero-grid .cf-hero-tile i {
+  color: var(--cf-accent);
+  font-size: 1.5rem;
+}
+.cf-hero-grid .cf-hero-tile .tile-label {
+  color: var(--cf-muted);
+  font-size: 0.85rem;
+}
+
+/* ---- Service cards ------------------------------------------------------ */
+.service-card {
+  border: 1px solid var(--cf-border);
+  border-radius: 10px;
+  background: #fff;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  height: 100%;
+}
+.service-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 24px rgba(31, 58, 61, 0.10);
+}
+.service-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 10px;
+  background-color: rgba(233, 114, 44, 0.12);
+  color: var(--cf-accent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+}
+
+/* ---- How it works steps -------------------------------------------------- */
+.step-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: var(--cf-primary);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Poppins", sans-serif;
+  font-weight: 600;
+}
+
+/* ---- Status badges (used everywhere a request status is shown) ---------- */
+.badge-status-pending      { background-color: #EFE1C4; color: var(--cf-warning); }
+.badge-status-accepted     { background-color: #D9E7EC; color: var(--cf-primary); }
+.badge-status-in-progress  { background-color: #DCE9F5; color: #2A5C99; }
+.badge-status-completed    { background-color: #DCEEE3; color: var(--cf-success); }
+.badge-status-rejected     { background-color: #F5DCD9; color: var(--cf-danger); }
+
+.badge-priority-high    { background-color: #F5DCD9; color: var(--cf-danger); }
+.badge-priority-medium  { background-color: #EFE1C4; color: var(--cf-warning); }
+.badge-priority-low     { background-color: #DCEEE3; color: var(--cf-success); }
+
+/* ---- Dashboard summary cards -------------------------------------------- */
+.summary-card {
+  border: 1px solid var(--cf-border);
+  border-radius: 10px;
+  background: #fff;
+  padding: 1.1rem 1.25rem;
+}
+.summary-card .summary-number {
+  font-family: "Poppins", sans-serif;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: var(--cf-primary);
+}
+.summary-card .summary-label {
+  color: var(--cf-muted);
+  font-size: 0.85rem;
+}
+
+/* ---- Auth pages (login / register) -------------------------------------- */
+.auth-card {
+  border: 1px solid var(--cf-border);
+  border-radius: 12px;
+  background: #fff;
+}
+
+/* ---- Footer -------------------------------------------------------------- */
+.footer-cf {
+  background-color: var(--cf-primary);
+  color: rgba(255, 255, 255, 0.75);
+}
+.footer-cf a {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+}
+.footer-cf a:hover {
+  color: #fff;
+}
+
+/* ---- Utility -------------------------------------------------------------- */
+.text-cf-accent { color: var(--cf-accent) !important; }
+.bg-cf-bg { background-color: var(--cf-bg) !important; }

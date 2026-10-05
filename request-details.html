@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% block title %}Request #{{ req.id }} - CampusFix{% endblock %}
+
+{% block content %}
+<section class="py-5">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+
+        {% if user.role == 'staff' %}
+        <a href="{{ url_for('staff_dashboard') }}" class="small text-decoration-none d-inline-block mb-3">
+          &larr; Back to Requests
+        </a>
+        {% else %}
+        <a href="{{ url_for('my_requests') }}" class="small text-decoration-none d-inline-block mb-3">
+          &larr; Back to My Requests
+        </a>
+        {% endif %}
+
+        <div class="service-card p-4 p-md-5">
+
+          <div class="d-flex flex-wrap justify-content-between align-items-start mb-4 gap-2">
+            <div>
+              <h3 class="mb-1">Request #{{ req.id }}</h3>
+              <p class="text-muted mb-0">Raised on {{ req.created_at }}</p>
+            </div>
+            <span class="badge rounded-pill fs-6 badge-status-{{ req.status_class }}">{{ req.status }}</span>
+          </div>
+
+          <div class="row g-4 mb-4">
+            <div class="col-md-6">
+              <div class="text-muted small">Service</div>
+              <div class="fw-semibold">{{ req.service }}</div>
+            </div>
+            <div class="col-md-6">
+              <div class="text-muted small">Priority</div>
+              <div>
+                <span class="badge rounded-pill badge-priority-{{ req.priority_class }}">{{ req.priority }}</span>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="text-muted small">Location</div>
+              <div class="fw-semibold">{{ req.location }}</div>
+            </div>
+            <div class="col-md-6">
+              <div class="text-muted small">Room Number</div>
+              <div class="fw-semibold">{{ req.room_number }}</div>
+            </div>
+
+            {% if user.role == 'staff' %}
+            <div class="col-md-6">
+              <div class="text-muted small">Raised By</div>
+              <div class="fw-semibold">{{ requester.full_name }} ({{ requester.student_id }})</div>
+            </div>
+            <div class="col-md-6">
+              <div class="text-muted small">Contact</div>
+              <div class="fw-semibold">{{ requester.phone }}</div>
+            </div>
+            {% endif %}
+          </div>
+
+          <div class="mb-4">
+            <div class="text-muted small mb-1">Problem Description</div>
+            <p class="mb-0">{{ req.description }}</p>
+          </div>
+
+          {% if user.role == 'staff' %}
+          <!-- ================= STAFF ACTIONS ================= -->
+          <hr class="my-4">
+          <h5 class="mb-3">Update Status</h5>
+
+          <div class="d-flex flex-wrap gap-2 mb-3">
+            <form method="POST" action="{{ url_for('update_request_status', request_id=req.id) }}">
+              <input type="hidden" name="status" value="Accepted">
+              <button type="submit" class="btn btn-cf-primary" {% if req.is_closed %}disabled{% endif %}>
+                <i class="bi bi-check-lg me-1"></i> Accept
+              </button>
+            </form>
+            <form method="POST" action="{{ url_for('update_request_status', request_id=req.id) }}">
+              <input type="hidden" name="status" value="Rejected">
+              <button type="submit" class="btn btn-outline-danger" {% if req.is_closed %}disabled{% endif %}>
+                <i class="bi bi-x-lg me-1"></i> Reject
+              </button>
+            </form>
+          </div>
+
+          {% if req.is_closed %}
+          <div class="alert alert-light border mb-0">
+            <i class="bi bi-lock-fill me-2"></i>
+            This request is <strong>{{ req.status }}</strong> and is now closed - its status can no longer be changed.
+          </div>
+          {% else %}
+          <form method="POST" action="{{ url_for('update_request_status', request_id=req.id) }}" class="d-flex gap-2 flex-wrap">
+            <select name="status" class="form-select" style="max-width: 220px;">
+              {% for s in status_list %}
+                {% if s == req.status %}
+                <option value="{{ s }}" selected>{{ s }}</option>
+                {% else %}
+                <option value="{{ s }}">{{ s }}</option>
+                {% endif %}
+              {% endfor %}
+            </select>
+            <button type="submit" class="btn btn-cf-accent">Update Status</button>
+          </form>
+          {% endif %}
+
+          {% else %}
+          <!-- ================= STUDENT VIEW ================= -->
+          <hr class="my-4">
+          <h5 class="mb-3">Status Timeline</h5>
+          <ol class="list-group list-group-numbered">
+            {% for step in timeline %}
+              {% if step.is_current %}
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{ step.label }}
+                <span class="badge badge-status-{{ step.css_class }} rounded-pill">Current</span>
+              </li>
+              {% else %}
+              <li class="list-group-item list-group-item-light d-flex justify-content-between align-items-center">
+                {{ step.label }}
+              </li>
+              {% endif %}
+            {% endfor %}
+          </ol>
+          {% if req.status == 'Rejected' %}
+          <div class="alert alert-danger mt-3 mb-0">This request was rejected by the maintenance staff.</div>
+          {% endif %}
+          {% endif %}
+
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

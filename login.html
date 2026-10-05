@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Login - CampusFix{% endblock %}
+
+{% block content %}
+<section class="py-5 bg-cf-bg">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-6 col-lg-5">
+
+        <div class="auth-card p-4 p-md-5">
+          <h2 class="mb-1">Welcome back</h2>
+          <p class="text-muted mb-4">Login to continue to CampusFix.</p>
+
+          <!-- Error message area: shown by the server, or by JS validation -->
+          {% if error %}
+          <div id="loginErrorBox" class="alert alert-danger" role="alert">{{ error }}</div>
+          {% else %}
+          <div id="loginErrorBox" class="alert alert-danger d-none" role="alert"></div>
+          {% endif %}
+
+          <form id="loginForm" method="POST" action="{{ url_for('login') }}" novalidate>
+
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input type="email" class="form-control" id="email" name="email" placeholder="you@campusfix.edu" required>
+              <div class="invalid-feedback">Please enter a valid email address.</div>
+            </div>
+
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <div class="input-group">
+                <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
+                <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                  <i class="bi bi-eye" id="togglePasswordIcon"></i>
+                </button>
+              </div>
+              <div class="invalid-feedback">Password is required.</div>
+            </div>
+
+            <!--
+              TEMPORARY demo helper: since the real staff/student roles will
+              be looked up in the database later, this project ships two
+              ready-made demo accounts so the team can test both dashboards:
+                Student -> student@campusfix.edu / student123
+                Staff   -> staff@campusfix.edu   / staff123
+            -->
+
+            <button type="submit" class="btn btn-cf-primary w-100 mb-3">Login</button>
+            <a href="{{ url_for('register') }}" class="btn btn-outline-cf w-100">Register</a>
+
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+{% endblock %}

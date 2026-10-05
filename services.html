@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% block title %}Services - CampusFix{% endblock %}
+
+{% block content %}
+<section class="py-5">
+  <div class="container">
+
+    <div class="mb-4">
+      <h2 class="mb-1">Browse Services</h2>
+      <p class="text-muted mb-0">Find the right category for your issue.</p>
+    </div>
+
+    <!-- Search + filter -->
+    <div class="row g-3 mb-4">
+      <div class="col-md-7">
+        <div class="input-group input-group-lg">
+          <span class="input-group-text bg-white"><i class="bi bi-search"></i></span>
+          <input type="text" id="serviceSearch" class="form-control" placeholder="Search for a service...">
+        </div>
+      </div>
+      <div class="col-md-5">
+        <select id="serviceFilter" class="form-select form-select-lg">
+          <option value="all">All Categories</option>
+          {% for service in services %}
+          <option value="{{ service.slug }}">{{ service.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+
+    <!-- Service cards -->
+    <div class="row g-4" id="serviceCardRow">
+      {% for service in services %}
+      <div class="col-sm-6 col-lg-4 service-card-item" data-name="{{ service.slug }}">
+        <div class="service-card p-4 d-flex flex-column h-100">
+          <div class="service-icon mb-3">
+            <i class="bi {{ service.icon }}"></i>
+          </div>
+          <div class="d-flex justify-content-between align-items-start mb-1">
+            <h5 class="mb-0">{{ service.name }}</h5>
+            <span class="small text-muted"><i class="bi bi-star-fill text-cf-accent"></i> {{ service.rating }}</span>
+          </div>
+          <p class="text-muted small flex-grow-1">{{ service.desc }}</p>
+          {% if user %}
+          <a href="{{ url_for('request_service', service=service.name) }}" class="btn btn-cf-primary btn-sm mt-2">
+            Request Service
+          </a>
+          {% else %}
+          <a href="{{ url_for('login') }}" class="btn btn-cf-primary btn-sm mt-2">
+            Request Service
+          </a>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- Shown when a search/filter combination has no matches -->
+    <div id="noServiceResults" class="alert alert-light border text-center mt-4 d-none">
+      No services match your search. Try a different keyword.
+    </div>
+
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/student.js') }}"></script>
+{% endblock %}
